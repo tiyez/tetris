@@ -5,6 +5,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 #include <stdio.h>
 
 #define Array_Count(arr) (int)(sizeof (arr) / sizeof ((arr)[0]))
@@ -419,6 +420,8 @@ int		run_game (struct game *game, struct input *input) {
 void	init_game (struct game *game) {
 	memset (game, 0, sizeof *game);
 
+	srand(time(0));
+
 	game->time_start = stm_now ();
 	game->time_last_move = game->time_start;
 	game->freq = 1000;
@@ -426,10 +429,8 @@ void	init_game (struct game *game) {
 
 	game->is_play = 1;
 	game->is_holding = 1;
-	// game->next_holding_index = get_next_holding_index ();
-	// game->current_holding_index = get_next_holding_index ();
-	game->next_holding_index = 1;
-	game->current_holding_index = 1;
+	game->next_holding_index = get_next_holding_index ();
+	game->current_holding_index = get_next_holding_index ();
 	game->holding_rotate = 0;
 
 	make_holding (game, game->current_holding_index);
