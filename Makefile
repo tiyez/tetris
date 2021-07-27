@@ -6,7 +6,6 @@ DEPDIR=.dep
 OBJDIR=.obj
 
 SRC = main.c\
-pool.c\
 draw.c\
 game.c
 MSRC = sokol_unit.m
