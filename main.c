@@ -12,6 +12,8 @@
 #include "state.h"
 #include "draw.h"
 
+#include "settings.h"
+
 void	init_state (struct state *);
 void	calculate_frame (struct state *);
 void	cleanup (struct state *);
@@ -53,7 +55,7 @@ void	init_state (struct state *state) {
 	state->framebuffer.size = state->framebuffer.stride * state->framebuffer.height;
 	state->framebuffer.data = malloc (state->framebuffer.size);
 
-	memset (state->framebuffer.data, 255, state->framebuffer.size);
+	memset (state->framebuffer.data, Background_Brightness, state->framebuffer.size);
 	memset (&state->input, 0, sizeof state->input);
 
 	state->img = sg_make_image(&(sg_image_desc){

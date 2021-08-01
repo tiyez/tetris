@@ -1,6 +1,7 @@
 
 #include "draw.h"
 #include "game.h"
+#include "settings.h"
 
 #include <string.h>
 
@@ -38,11 +39,27 @@ void	draw_game (struct framebuffer *buffer, struct game *game) {
 
 	vars.tile_width = tile_width_y < tile_width_x ? tile_width_y : tile_width_x;
 
+	vars.field_offset_x = (buffer->width - field_width * vars.tile_width) / 2;
+
 	draw_field (buffer, game, &vars);
 
 }
 
+static unsigned	set_color_brightness (unsigned color, float brightness) {
+	int			r = color & 0x000000FF;
+	int			g = (color & 0x0000FF00) >> 8;
+	int			b = (color & 0x00FF0000) >> 16;
+
+	color = ((int) (r * brightness) & 0xFF);
+	color += ((int) (g * brightness) & 0xFF) << 8;
+	color += ((int) (b * brightness) & 0xFF) << 16;
+	color += 0xFF000000;
+	return (color);
+}
+
 static void	draw_field (struct framebuffer *buffer, struct game *game, struct vars *vars) {
+
+	const float	color_brightness = Tile_Brightness;
 
 	const int	field_height = sizeof game->field / sizeof game->field[0];
 	const int	field_width = sizeof game->field[0] / sizeof game->field[0][0];
@@ -61,7 +78,7 @@ static void	draw_field (struct framebuffer *buffer, struct game *game, struct va
 				for (int tile_x = 0; tile_x < vars->tile_width; tile_x += 1) {
 					unsigned	*out = (unsigned *)(ptr + tile_y * buffer->stride + tile_x * buffer->channels);
 
-					*out = s_colors[game->field[y][x]];
+					*out = set_color_brightness (s_colors[game->field[y][x]], color_brightness);
 				}
 			}
 
@@ -86,7 +103,7 @@ static void	draw_field (struct framebuffer *buffer, struct game *game, struct va
 						unsigned	*out = (unsigned *)(ptr + tile_y * buffer->stride + tile_x * buffer->channels);
 
 						if (game->holding[y - game->holding_y][x] != Color_Empty) {
-							*out = s_colors[game->holding[y - game->holding_y][x]];
+							*out = set_color_brightness (s_colors[game->holding[y - game->holding_y][x]], color_brightness);
 						}
 					}
 				}

@@ -4,6 +4,8 @@
 
 #include <stddef.h>
 
+#include "settings.h"
+
 enum color {
 	Color_Empty,
 
@@ -45,7 +47,7 @@ struct game {
 	size_t	freq; // miliseconds per move
 
 	unsigned char	holding[4][4];
-	unsigned char	field[15][10];
+	unsigned char	field[Field_Height][Field_Width];
 };
 
 void	init_game (struct game *);
